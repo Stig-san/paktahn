@@ -81,3 +81,41 @@ later:
   * show backtrace/enter debugger restart
 
   * show summary of what has been done before exit
+
+Update for pacman 4
+
+  in alpm.lisp:   54 alpm_initialize (change to accept char *root, char *dbpath, alpm_errno_t *err)
+                55 alpm_option_set_root (remove)
+                56 alpm_option_set_dbpath (remove)
+                143 alpm_grp_get_name (remove)
+                62 alpm_db_register_sync (now requires and extra parameter of alpm_siglevel_t)
+                - many functions now require a first parameter of an alpm_handle_t *:
+                    - alpm_option_get_*
+                        line 59
+                    - alpm_option_set_*
+                        lines 55, 56
+                    - alpm_db_register_sync
+                        line 62
+                    - alpm_db_unregister_all
+                        line 64    
+                - several structs are no longer opaque
+
+                [ADDED] (WHAT DO I DO WITH THIS?)
+                - option functions:
+                    alpm_{get,set}_eventcb(), alpm_option_{get,set}_convcb(),
+                    alpm_option_{get,set}_progresscb()
+                - package signing functions:
+                    alpm_option_get_default_siglevel(), alpm_option_set_default_siglevel(),
+                    alpm_option_get_gpgdir(), alpm_option_set_gpgdir(), alpm_db_get_siglevel(),
+                    alpm_siglist_cleanup(), alpm_db_check_pgp_signature(), alpm_pkg_check_pgp_signature(),
+                    alpm_pkg_get_origin(), alpm_pkg_get_sha256sum(), alpm_pkg_get_base64_sig()
+                - list functions:
+                    alpm_list_to_array(), alpm_list_previous()
+                - structs:
+                    alpm_backup_t, alpm_file_t, alpm_filelist_t
+                - enums:
+                    alpm_siglevel_t, alpm_sigstatus_t, alpm_sigvalidity_t, alpm_pkgfrom_t
+                - error codes:
+                    ALPM_ERR_DB_INVALID, ALPM_ERR_DB_INVALID_SIG, ALPM_ERR_GPGME,
+                    ALPM_ERR_PKG_INVALID_CHECKSUM, ALPM_ERR_PKG_INVALID_SIG, ALPM_ERR_SIG_INVALID,
+                    ALPM_ERR_SIG_MISSING 
